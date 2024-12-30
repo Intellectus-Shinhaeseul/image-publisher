@@ -38,7 +38,7 @@ This publisher operates in **peer mode**, publishing through a Zenoh router. Use
 zenohd -c router.json5
 ```
 
-## Installation
+### Clone and Build the Project
 
 Clone this repository:
 
