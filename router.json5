@@ -1,0 +1,22 @@
+{
+    mode: "router",
+    listen: {
+        endpoints: ["tcp/localhost:7447"],
+    },
+    scouting: {
+        multicast: {
+            enabled: false,
+        },
+        gossip: {
+            enabled: true,
+            autoconnect: { 
+                router: [],
+            },
+        },
+    },
+    routing: {
+        router: {
+            peers_failover_brokering: true,
+        },
+    },
+}
