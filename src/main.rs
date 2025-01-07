@@ -1,11 +1,20 @@
 use std::{io, io::Read, path::PathBuf};
+use time::macros::format_description;
 use tokio::time::Duration;
+use tracing_subscriber::fmt::time::UtcTime;
 
 #[tokio::main]
 async fn main() {
+    let timer = UtcTime::new(format_description!(
+        "[year]-[month]-[day] [hour]:[minute]:[second]"
+    ));
+    tracing_subscriber::fmt()
+        // .with_max_level(tracing::Level::DEBUG)  // DEBUG
+        .with_timer(timer)
+        .init();
     zenoh::init_log_from_env_or("debug");
 
-    println!("Topic Number(1~4): ");
+    tracing::info!("Topic Number(1~4): ");
     let mut input = String::new();
     io::stdin()
         .read_line(&mut input)
@@ -21,10 +30,10 @@ async fn main() {
     config_path.push(config_file);
     let config = zenoh::Config::from_file(config_path).expect("Failed to load configuration file");
 
-    println!("Opening session...");
+    tracing::info!("Opening session...");
     let session = zenoh::open(config).await.unwrap();
 
-    println!("Declare Publisher on '{}'...", &topic_name);
+    tracing::info!("Declare Publisher on '{}'...", &topic_name);
     let publisher = session.declare_publisher(&topic_name).await.unwrap();
 
     let data = image_to_buf(&img_path);
@@ -33,7 +42,7 @@ async fn main() {
     loop {
         interval.tick().await;
         publisher.put(&data).await.unwrap();
-        // println!("Published image data to '{}'", &topic_name);
+        tracing::trace!("Published image data to '{}'", &topic_name);
     }
 }
 
