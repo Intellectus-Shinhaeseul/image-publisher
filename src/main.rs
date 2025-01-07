@@ -9,7 +9,7 @@ async fn main() {
         "[year]-[month]-[day] [hour]:[minute]:[second]"
     ));
     tracing_subscriber::fmt()
-        // .with_max_level(tracing::Level::DEBUG)  // DEBUG
+        .with_max_level(tracing::Level::DEBUG)  // DEBUG
         .with_timer(timer)
         .init();
     zenoh::init_log_from_env_or("debug");
