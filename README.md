@@ -7,18 +7,17 @@ This Rust package is designed to publish **5MB images at 30Hz** using `zenoh`.
 - Dynamically assigns a topic name based on user input.
 
 ## How It Works
-1. Run the package using `cargo run`.
-2. You will be prompted to enter a number.
-   - The number you input will determine the topic name.
+1. Run the package using `cargo run -- $camera_num`.
+2. You will be prompted to enter a number:
+   - The number you enter will determine the topic name.
    - **Example:**
-     - If you input `1`, the topic name will be `camera1`.
-     - If you input `2`, the topic name will be `camera2`.
+     - If you enter `1`, the topic name will be `camera1`.
+     - If you enter `2`, the topic name will be `camera2`.
 3. The package will begin publishing images to the specified topic using `zenoh`.
 
 ## Example Usage
 ```bash
-$ cargo run
-Topic Number(camera*): 1
+$ cargo run -- 1
 Publishing images on topic: camera1
 ```
 
