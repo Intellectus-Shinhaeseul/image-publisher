@@ -1,4 +1,4 @@
-use std::{io, io::Read, path::PathBuf};
+use std::{env, io, io::Read, path::PathBuf};
 use time::macros::format_description;
 use tokio::time::Duration;
 use tracing_subscriber::fmt::time::UtcTime;
@@ -9,17 +9,25 @@ async fn main() {
         "[year]-[month]-[day] [hour]:[minute]:[second]"
     ));
     tracing_subscriber::fmt()
-        .with_max_level(tracing::Level::DEBUG)  // DEBUG
+        .with_max_level(tracing::Level::DEBUG) // DEBUG
         .with_timer(timer)
         .init();
     zenoh::init_log_from_env_or("debug");
 
-    tracing::info!("Topic Number(1~4): ");
-    let mut input = String::new();
-    io::stdin()
-        .read_line(&mut input)
-        .expect("Failed to read line");
-    let topic_num = input.trim();
+    // tracing::info!("Topic Number(1~4): ");
+    // let mut input = String::new();
+    // io::stdin()
+    //     .read_line(&mut input)
+    //     .expect("Failed to read line");
+    // let topic_num = input.trim();
+    // let topic_name = String::from("camera") + topic_num;
+
+    let args: Vec<String> = env::args().collect();
+    if args.len() != 2 {
+        eprintln!("Usage: {} <topic_number>", args[0]);
+        std::process::exit(1);
+    }
+    let topic_num = &args[1];
     let topic_name = String::from("camera") + topic_num;
 
     let mut img_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
